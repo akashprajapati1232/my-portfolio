@@ -63,12 +63,12 @@ A modern, responsive personal portfolio website built with HTML, CSS, and vanill
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/akashprajapati1232/portfolio.git
+   git clone https://github.com/akashprajapati1232/my-portfolio.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd portfolio
+   cd my-portfolio
    ```
 
 3. Open the project:
@@ -85,7 +85,7 @@ A modern, responsive personal portfolio website built with HTML, CSS, and vanill
 ## 📂 Project Structure
 
 ```
-portfolio/
+my-portfolio/
 ├── assets/
 │   ├── animations/       # Animation JSON files
 │   │   └── jellyfish.json
@@ -186,7 +186,7 @@ The portfolio is tested and works on the following browsers:
 - Edge (latest)
 - Opera (latest)
 
-## � Recent Updates
+## 🔄 Recent Updates
 
 - **Certificate Gallery**: Added a gallery to view and download certificates
 - **Navigation Improvements**: Enhanced keyboard navigation throughout the site
@@ -194,7 +194,7 @@ The portfolio is tested and works on the following browsers:
 - **Performance Optimizations**: Improved loading times and animations
 - **Accessibility Enhancements**: Improved keyboard navigation and screen reader support
 
-## �📄 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -213,7 +213,7 @@ Akash Prajapati - [akashprajapati1232@gmail.com](mailto:akashprajapati1232@gmail
 - LinkedIn: [https://www.linkedin.com/in/akash-prajapati1232/](https://www.linkedin.com/in/akash-prajapati1232/)
 - Instagram: [https://www.instagram.com/itz_prabhas43/](https://www.instagram.com/itz_prabhas43/)
 
-Project Link: [https://github.com/akashprajapati1232/portfolio](https://github.com/akashprajapati1232/portfolio)
+Project Link: [https://github.com/akashprajapati1232/my-portfolio](https://github.com/akashprajapati1232/my-portfolio)
 
 ---
 
