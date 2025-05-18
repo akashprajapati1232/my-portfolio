@@ -186,8 +186,13 @@ function initProjectModal() {
                     <p>This portfolio was designed and developed from scratch to showcase my web development skills and provide visitors with an easy way to learn about my projects and abilities.</p>
                     <div class="modal-gallery">
                         <h3>Project Gallery</h3>
-                        <div class="gallery-placeholder">
-                            <p>You're currently viewing this project!</p>
+                        <div class="gallery-grid">
+                            <img src="assets/images/portfolio/01-portfolio.png" alt="Portfolio Screenshot 1" class="gallery-img">
+                            <img src="assets/images/portfolio/02-portfolio.png" alt="Portfolio Screenshot 2" class="gallery-img">
+                            <img src="assets/images/portfolio/03-portfolio.png" alt="Portfolio Screenshot 3" class="gallery-img">
+                            <img src="assets/images/portfolio/04-portfolio.png" alt="Portfolio Screenshot 4" class="gallery-img">
+                            <img src="assets/images/portfolio/05-portfolio.png" alt="Portfolio Screenshot 5" class="gallery-img">
+                            <img src="assets/images/portfolio/06-portfolio.png" alt="Portfolio Screenshot 6" class="gallery-img">
                         </div>
                     </div>
                 `;
@@ -212,8 +217,10 @@ function initProjectModal() {
                     </ul>
                     <div class="modal-gallery">
                         <h3>Project Gallery</h3>
-                        <div class="gallery-placeholder">
-                            <p>This is a simple game with basic functionality. Screenshots will be added as development progresses.</p>
+                        <div class="gallery-grid">
+                            <img src="assets/images/snake-game/snake-game01.png" alt="Snake Game Screenshot 1" class="gallery-img">
+                            <img src="assets/images/snake-game/snake-game02.png" alt="Snake Game Screenshot 2" class="gallery-img">
+                            <img src="assets/images/snake-game/snake-game03.png" alt="Snake Game Screenshot 3" class="gallery-img">
                         </div>
                     </div>
                 `;

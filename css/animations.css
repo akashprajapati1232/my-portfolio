@@ -421,6 +421,20 @@
     margin-bottom: 0;
 }
 
+.cert-link {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--primary-light);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.cert-link:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
 /* ===== SKILLS SECTION ===== */
 .skills-content {
     display: grid;

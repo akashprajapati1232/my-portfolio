@@ -296,6 +296,10 @@
         height: 160px;
     }
 
+    .project-img {
+        object-position: center top;
+    }
+
     .project-content {
         padding: 15px;
     }
@@ -411,6 +415,11 @@
         height: 150px;
     }
 
+    .project-img {
+        object-position: center top;
+        max-height: 150px;
+    }
+
     .project-content {
         padding: 15px;
     }
@@ -424,6 +433,11 @@
 
     .project-image {
         height: 140px;
+    }
+
+    .project-img {
+        object-position: center top;
+        max-height: 140px;
     }
 
     .project-content {

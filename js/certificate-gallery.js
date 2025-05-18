@@ -17,6 +17,33 @@ document.addEventListener('DOMContentLoaded', function() {
     if (viewAllBtn) {
         viewAllBtn.addEventListener('click', openCertificateGallery);
     }
+
+    // Add event listener for Web Development Certificates link
+    const webDevCertLink = document.getElementById('webDevCertificatesLink');
+    if (webDevCertLink) {
+        webDevCertLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            openCertificateGallery('webdev');
+        });
+    }
+
+    // Add event listener for Quiz Certificate link
+    const quizCertLink = document.getElementById('quizCertificateLink');
+    if (quizCertLink) {
+        quizCertLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            openSpecificCertificate('12-quiz certificate.jpeg');
+        });
+    }
+
+    // Add event listener for ADCA Certificate link
+    const adcaCertLink = document.getElementById('adcaCertificatesLink');
+    if (adcaCertLink) {
+        adcaCertLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            openSpecificCertificate('11-ADCA certificate.jpeg');
+        });
+    }
 });
 
 // Create certificate gallery elements
@@ -59,7 +86,7 @@ function createCertificateGallery() {
                     <button class="certificate-lightbox-prev"><i class="fas fa-chevron-left"></i></button>
                     <button class="certificate-lightbox-next"><i class="fas fa-chevron-right"></i></button>
                 </div>
-                <div class="certificate-lightbox-counter">Certificate 1 of 9</div>
+                <div class="certificate-lightbox-counter">Certificate 1 of 12</div>
             </div>
         `;
 
@@ -113,15 +140,25 @@ function createCertificateGallery() {
 }
 
 // Open certificate gallery
-function openCertificateGallery() {
+function openCertificateGallery(filter) {
     const galleryContainer = document.getElementById('certificateGallery');
+
+    // Update gallery title based on filter
+    const galleryTitle = galleryContainer.querySelector('.certificate-gallery-title');
+    if (galleryTitle) {
+        if (filter === 'webdev') {
+            galleryTitle.textContent = 'Web Development Certificates';
+        } else {
+            galleryTitle.textContent = 'All Certificates';
+        }
+    }
 
     // Show gallery
     galleryContainer.classList.add('active');
     document.body.style.overflow = 'hidden'; // Prevent scrolling
 
-    // Load certificates
-    loadCertificates();
+    // Load certificates with filter
+    loadCertificates(filter);
 }
 
 // Close certificate gallery
@@ -132,7 +169,7 @@ function closeCertificateGallery() {
 }
 
 // Load certificates from the folder
-function loadCertificates() {
+function loadCertificates(filter) {
     const certificateGrid = document.getElementById('certificateGrid');
 
     // Clear previous content
@@ -141,25 +178,35 @@ function loadCertificates() {
     // Certificate folder path
     const certificatePath = 'assets/images/certificate/';
 
-    // List of actual certificate files from the folder
-    certificateFiles = [
-        { name: 'Web Development Diploma', file: '01-web development diploma.jpg' },
-        { name: 'Web Development Marksheet', file: '02-web development marksheet.jpg' },
-        { name: 'CSS Certificate', file: '03-css certificate.jpg' },
-        { name: 'CSS Marksheet', file: '04-css marksheet.jpg' },
-        { name: 'Knowledge Gate HTML', file: '05-knowladge gate html.png' },
-        { name: 'Knowledge Gate CSS Certificate', file: '06-knowladge gate css certificate.jpg' },
-        { name: 'Python Certificate', file: '07-Python.jpg' },
-        { name: 'SCOA Data Entry Operator', file: '08-SCOA Data Entry Operator.jpg' },
-        { name: 'Mindluster Certificate', file: '09-Mindluster_Certificate.jpg' }
+    // List of all certificate files from the folder
+    const allCertificates = [
+        { name: 'Web Development Diploma', file: '01-web development diploma.jpg', category: 'webdev' },
+        { name: 'Web Development Marksheet', file: '02-web development marksheet.jpg', category: 'webdev' },
+        { name: 'CSS Certificate', file: '03-css certificate.jpg', category: 'webdev' },
+        { name: 'CSS Marksheet', file: '04-css marksheet.jpg', category: 'webdev' },
+        { name: 'Knowledge Gate HTML', file: '05-knowladge gate html.png', category: 'webdev' },
+        { name: 'Knowledge Gate CSS Certificate', file: '06-knowladge gate css certificate.jpg', category: 'webdev' },
+        { name: 'Python Certificate', file: '07-Python.jpg', category: 'programming' },
+        { name: 'SCOA Data Entry Operator', file: '08-SCOA Data Entry Operator.jpg', category: 'other' },
+        { name: 'Mindluster Certificate', file: '09-Mindluster_Certificate.jpg', category: 'other' },
+        { name: 'ADCA Marksheet', file: '10-ADCA marksheet.jpeg', category: 'other' },
+        { name: 'ADCA Certificate', file: '11-ADCA certificate.jpeg', category: 'other' },
+        { name: 'Quiz Competition Certificate', file: '12-quiz certificate.jpeg', category: 'other' }
     ];
+
+    // Filter certificates if a filter is provided
+    if (filter === 'webdev') {
+        certificateFiles = allCertificates.filter(cert => cert.category === 'webdev');
+    } else {
+        certificateFiles = allCertificates;
+    }
 
     // Check if there are any certificates
     if (certificateFiles.length === 0) {
         certificateGrid.innerHTML = `
             <div class="certificate-empty-state">
                 <i class="fas fa-certificate"></i>
-                <p>No certificates found. Add your certificates to the "assets/images/certificate" folder.</p>
+                <p>No certificates found.</p>
             </div>
         `;
         return;
@@ -263,6 +310,99 @@ function downloadCertificate() {
 
     // Show download notification
     showDownloadNotification(cert.name);
+}
+
+// Open a specific certificate directly
+function openSpecificCertificate(fileName) {
+    // Certificate folder path
+    const certificatePath = 'assets/images/certificate/';
+
+    // Find the certificate name based on the filename
+    let certificateName = '';
+    const allCertificates = [
+        { name: 'Web Development Diploma', file: '01-web development diploma.jpg', category: 'webdev' },
+        { name: 'Web Development Marksheet', file: '02-web development marksheet.jpg', category: 'webdev' },
+        { name: 'CSS Certificate', file: '03-css certificate.jpg', category: 'webdev' },
+        { name: 'CSS Marksheet', file: '04-css marksheet.jpg', category: 'webdev' },
+        { name: 'Knowledge Gate HTML', file: '05-knowladge gate html.png', category: 'webdev' },
+        { name: 'Knowledge Gate CSS Certificate', file: '06-knowladge gate css certificate.jpg', category: 'webdev' },
+        { name: 'Python Certificate', file: '07-Python.jpg', category: 'programming' },
+        { name: 'SCOA Data Entry Operator', file: '08-SCOA Data Entry Operator.jpg', category: 'other' },
+        { name: 'Mindluster Certificate', file: '09-Mindluster_Certificate.jpg', category: 'other' },
+        { name: 'ADCA Marksheet', file: '10-ADCA marksheet.jpeg', category: 'other' },
+        { name: 'ADCA Certificate', file: '11-ADCA certificate.jpeg', category: 'other' },
+        { name: 'Quiz Competition Certificate', file: '12-quiz certificate.jpeg', category: 'other' }
+    ];
+
+    for (const cert of allCertificates) {
+        if (cert.file === fileName) {
+            certificateName = cert.name;
+            break;
+        }
+    }
+
+    if (certificateName === '') {
+        certificateName = 'Certificate';
+    }
+
+    // Create a lightbox for just this certificate
+    const lightbox = document.createElement('div');
+    lightbox.className = 'certificate-lightbox active';
+    lightbox.id = 'singleCertificateLightbox';
+
+    lightbox.innerHTML = `
+        <div class="certificate-lightbox-content">
+            <img src="${certificatePath}${fileName}" alt="${certificateName}" class="certificate-lightbox-img">
+            <button class="certificate-lightbox-close">&times;</button>
+            <button class="certificate-lightbox-download" title="Download Certificate"><i class="fas fa-download"></i></button>
+        </div>
+    `;
+
+    document.body.appendChild(lightbox);
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+
+    // Add event listeners
+    const closeBtn = lightbox.querySelector('.certificate-lightbox-close');
+    closeBtn.addEventListener('click', function() {
+        document.body.removeChild(lightbox);
+        document.body.style.overflow = 'auto'; // Enable scrolling
+    });
+
+    // Download button
+    const downloadBtn = lightbox.querySelector('.certificate-lightbox-download');
+    downloadBtn.addEventListener('click', function() {
+        // Create a temporary anchor element
+        const downloadLink = document.createElement('a');
+        downloadLink.href = certificatePath + fileName;
+        downloadLink.download = certificateName.replace(/\s+/g, '_') + '.' + fileName.split('.').pop();
+
+        // Append to body, click and remove
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        // Show download notification
+        showDownloadNotification(certificateName);
+    });
+
+    // Close lightbox when clicking outside the image
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            document.body.removeChild(lightbox);
+            document.body.style.overflow = 'auto'; // Enable scrolling
+        }
+    });
+
+    // Keyboard navigation
+    const escapeHandler = function(e) {
+        if (e.key === 'Escape') {
+            document.body.removeChild(lightbox);
+            document.body.style.overflow = 'auto'; // Enable scrolling
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+
+    document.addEventListener('keydown', escapeHandler);
 }
 
 // Show a notification when certificate is downloaded
