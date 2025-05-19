@@ -218,9 +218,9 @@ function initProjectModal() {
                     <div class="modal-gallery">
                         <h3>Project Gallery</h3>
                         <div class="gallery-grid">
-                            <img src="assets/images/snake-game/snake-game01.png" alt="Snake Game Screenshot 1" class="gallery-img">
-                            <img src="assets/images/snake-game/snake-game02.png" alt="Snake Game Screenshot 2" class="gallery-img">
-                            <img src="assets/images/snake-game/snake-game03.png" alt="Snake Game Screenshot 3" class="gallery-img">
+                            <img src="assets/images/snake-game/04-new-version-snake-game.png" alt="Snake Game Screenshot 1" class="gallery-img">
+                            <img src="assets/images/snake-game/05-new-version-snake-game.png" alt="Snake Game Screenshot 2" class="gallery-img">
+                            <img src="assets/images/snake-game/06-new-version-snake-game.png" alt="Snake Game Screenshot 3" class="gallery-img">
                         </div>
                     </div>
                 `;
