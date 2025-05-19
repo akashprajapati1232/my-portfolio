@@ -145,8 +145,8 @@ function initJellyfishAnimation() {
 
             // Calculate movement based on mouse position
             // Move jellyfish in the opposite direction of mouse for a more natural feel
-            const moveX = (0.5 - mouseX) * 20; // Adjust multiplier for more/less movement
-            const moveY = (0.5 - mouseY) * 20;
+            const moveX = (0.5 - mouseX) * 25; // Increased multiplier for more movement
+            const moveY = (0.5 - mouseY) * 25;
 
             // Apply transform to jellyfish container
             jellyfishContainer.style.transform = `translate(${moveX}px, ${moveY}px)`;
@@ -182,16 +182,16 @@ function createFallbackJellyfishAnimation() {
     jellyfishContainer.id = 'jellyfish-container';
     jellyfishContainer.style.position = 'relative';
     jellyfishContainer.style.width = '100%';
-    jellyfishContainer.style.maxWidth = '500px';
-    jellyfishContainer.style.height = '500px';
+    jellyfishContainer.style.maxWidth = '600px';
+    jellyfishContainer.style.height = '600px';
 
     // Create jellyfish elements
     for (let i = 0; i < 5; i++) {
         const jellyfish = document.createElement('div');
         jellyfish.className = 'jellyfish';
         jellyfish.style.position = 'absolute';
-        jellyfish.style.width = `${80 + Math.random() * 40}px`;
-        jellyfish.style.height = `${100 + Math.random() * 50}px`;
+        jellyfish.style.width = `${100 + Math.random() * 50}px`;
+        jellyfish.style.height = `${120 + Math.random() * 60}px`;
         jellyfish.style.borderRadius = '70% 70% 20% 20%';
         jellyfish.style.background = getRandomGradient();
         jellyfish.style.boxShadow = `0 0 20px ${getRandomColor()}`;
@@ -208,7 +208,7 @@ function createFallbackJellyfishAnimation() {
             tentacle.className = 'tentacle';
             tentacle.style.position = 'absolute';
             tentacle.style.width = '2px';
-            tentacle.style.height = `${30 + Math.random() * 40}px`;
+            tentacle.style.height = `${40 + Math.random() * 50}px`;
             tentacle.style.background = getRandomColor();
             tentacle.style.bottom = '-30px';
             tentacle.style.left = `${j * 10 + 10}px`;
@@ -248,8 +248,8 @@ function createFallbackJellyfishAnimation() {
         const mouseX = e.clientX / window.innerWidth;
         const mouseY = e.clientY / window.innerHeight;
 
-        const moveX = (0.5 - mouseX) * 30;
-        const moveY = (0.5 - mouseY) * 30;
+        const moveX = (0.5 - mouseX) * 35;
+        const moveY = (0.5 - mouseY) * 35;
 
         jellyfishContainer.style.transform = `translate(${moveX}px, ${moveY}px)`;
 

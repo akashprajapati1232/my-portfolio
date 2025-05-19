@@ -544,8 +544,8 @@ section {
 
 #jellyfish-container {
     width: 100%;
-    max-width: 500px;
-    height: 500px;
+    max-width: 600px;
+    height: 600px;
     position: relative;
     animation: float 6s ease-in-out infinite, fadeIn 1.5s ease-out forwards;
     opacity: 0;
