@@ -78,8 +78,8 @@ function createHackathonGallery() {
 
         const prevBtn = lightbox.querySelector('.certificate-lightbox-prev');
         const nextBtn = lightbox.querySelector('.certificate-lightbox-next');
-        prevBtn.addEventListener('click', prevImage);
-        nextBtn.addEventListener('click', nextImage);
+        prevBtn.addEventListener('click', prevHackathonImage);
+        nextBtn.addEventListener('click', nextHackathonImage);
 
         // Close gallery when clicking outside the content
         galleryContainer.addEventListener('click', function(e) {
@@ -105,9 +105,9 @@ function createHackathonGallery() {
                 }
             } else if (lightbox.classList.contains('active')) {
                 if (e.key === 'ArrowLeft') {
-                    prevImage();
+                    prevHackathonImage();
                 } else if (e.key === 'ArrowRight') {
-                    nextImage();
+                    nextHackathonImage();
                 }
             }
         });
@@ -117,11 +117,11 @@ function createHackathonGallery() {
 // Open hackathon gallery
 function openHackathonGallery() {
     const galleryContainer = document.getElementById('hackathonGallery');
-    
+
     // Show gallery
     galleryContainer.classList.add('active');
     document.body.style.overflow = 'hidden'; // Prevent scrolling
-    
+
     // Load hackathon images
     loadHackathonImages();
 }
@@ -136,13 +136,13 @@ function closeHackathonGallery() {
 // Load hackathon images from the folder
 function loadHackathonImages() {
     const hackathonGrid = document.getElementById('hackathonGrid');
-    
+
     // Clear previous content
     hackathonGrid.innerHTML = '';
-    
+
     // Hackathon folder path
     const hackathonPath = 'assets/images/hackthone/';
-    
+
     // List of all hackathon images
     const hackathonImages = [];
     for (let i = 1; i <= 13; i++) {
@@ -152,24 +152,24 @@ function loadHackathonImages() {
             description: `QR-based Health Record System - Screenshot ${i}`
         });
     }
-    
+
     // Create hackathon image items
     hackathonImages.forEach((image, index) => {
         const imageItem = document.createElement('div');
         imageItem.className = 'certificate-item'; // Reuse certificate item styles
-        
+
         imageItem.innerHTML = `
             <img src="${hackathonPath}${image.file}" alt="${image.description}" class="certificate-img" onerror="this.src='assets/images/certificate-placeholder.jpg'">
             <div class="certificate-overlay">
                 <h4 class="certificate-name">${image.description}</h4>
             </div>
         `;
-        
+
         // Add click event to open lightbox
         imageItem.addEventListener('click', function() {
             openHackathonLightbox(hackathonPath + image.file, image.description, index);
         });
-        
+
         hackathonGrid.appendChild(imageItem);
     });
 }
@@ -179,17 +179,17 @@ function openHackathonLightbox(imageSrc, imageDescription, index) {
     const lightbox = document.getElementById('hackathonLightbox');
     const lightboxImg = lightbox.querySelector('.certificate-lightbox-img');
     const counter = lightbox.querySelector('.certificate-lightbox-counter');
-    
+
     // Set image source
     lightboxImg.src = imageSrc;
     lightboxImg.alt = imageDescription;
-    
+
     // Update current index
     currentImageIndex = index;
-    
+
     // Update counter
     counter.textContent = `Image ${index + 1} of 13`;
-    
+
     // Show lightbox
     lightbox.classList.add('active');
 }
@@ -201,31 +201,31 @@ function closeHackathonLightbox() {
 }
 
 // Navigate to previous image
-function prevImage() {
+function prevHackathonImage() {
     // Calculate previous index with wrap-around
     const prevIndex = (currentImageIndex - 1 + 13) % 13;
-    
+
     // Get hackathon path
     const hackathonPath = 'assets/images/hackthone/';
     const num = prevIndex < 9 ? '0' + (prevIndex + 1) : (prevIndex + 1);
     const file = `${num}.jpeg`;
     const description = `QR-based Health Record System - Screenshot ${prevIndex + 1}`;
-    
+
     // Open the previous image
     openHackathonLightbox(hackathonPath + file, description, prevIndex);
 }
 
 // Navigate to next image
-function nextImage() {
+function nextHackathonImage() {
     // Calculate next index with wrap-around
     const nextIndex = (currentImageIndex + 1) % 13;
-    
+
     // Get hackathon path
     const hackathonPath = 'assets/images/hackthone/';
     const num = nextIndex < 9 ? '0' + (nextIndex + 1) : (nextIndex + 1);
     const file = `${num}.jpeg`;
     const description = `QR-based Health Record System - Screenshot ${nextIndex + 1}`;
-    
+
     // Open the next image
     openHackathonLightbox(hackathonPath + file, description, nextIndex);
 }

@@ -1,28 +1,49 @@
 /*
 * Lightbox JavaScript for Akash Prajapati's Portfolio
 * Author: Akash Prajapati
-* Version: 1.0
+* Version: 1.1
 */
+
+// Use a namespace to avoid conflicts with other lightbox implementations
+const ProjectLightbox = {
+    // Store references to DOM elements
+    elements: {
+        lightbox: null,
+        lightboxImg: null,
+        counter: null,
+        prevBtn: null,
+        nextBtn: null,
+        closeBtn: null
+    },
+
+    // Store the current gallery context
+    currentGallery: {
+        images: [],
+        currentIndex: 0,
+        container: null
+    }
+};
 
 document.addEventListener('DOMContentLoaded', function() {
     // Create lightbox elements
-    createLightbox();
+    ProjectLightbox.createLightbox();
 
     // Initialize lightbox after modal is shown
     document.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('gallery-img')) {
-            initLightbox(e.target);
+        if (e.target && e.target.classList.contains('gallery-img') &&
+            e.target.closest('.modal-gallery')) {
+            ProjectLightbox.initLightbox(e.target);
         }
     });
 });
 
 // Create lightbox elements
-function createLightbox() {
+ProjectLightbox.createLightbox = function() {
     // Create lightbox container if it doesn't exist
-    if (!document.getElementById('lightbox')) {
+    if (!document.getElementById('project-lightbox')) {
         const lightbox = document.createElement('div');
-        lightbox.id = 'lightbox';
-        lightbox.className = 'lightbox';
+        lightbox.id = 'project-lightbox';
+        lightbox.className = 'lightbox project-lightbox';
 
         lightbox.innerHTML = `
             <div class="lightbox-content">
@@ -38,43 +59,43 @@ function createLightbox() {
 
         document.body.appendChild(lightbox);
 
-        // Add event listeners
-        const closeBtn = lightbox.querySelector('.lightbox-close');
-        const prevBtn = lightbox.querySelector('.lightbox-prev');
-        const nextBtn = lightbox.querySelector('.lightbox-next');
+        // Store references to DOM elements
+        this.elements.lightbox = lightbox;
+        this.elements.lightboxImg = lightbox.querySelector('.lightbox-img');
+        this.elements.counter = lightbox.querySelector('.lightbox-counter');
+        this.elements.closeBtn = lightbox.querySelector('.lightbox-close');
+        this.elements.prevBtn = lightbox.querySelector('.lightbox-prev');
+        this.elements.nextBtn = lightbox.querySelector('.lightbox-next');
 
-        closeBtn.addEventListener('click', closeLightbox);
-        prevBtn.addEventListener('click', prevImage);
-        nextBtn.addEventListener('click', nextImage);
+        // Add event listeners
+        this.elements.closeBtn.addEventListener('click', this.closeLightbox.bind(this));
+        this.elements.prevBtn.addEventListener('click', this.prevImage.bind(this));
+        this.elements.nextBtn.addEventListener('click', this.nextImage.bind(this));
 
         // Close lightbox when clicking outside the image
-        lightbox.addEventListener('click', function(e) {
+        lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox) {
-                closeLightbox();
+                this.closeLightbox();
             }
         });
 
         // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (!lightbox.classList.contains('active')) return;
+        document.addEventListener('keydown', (e) => {
+            if (!this.elements.lightbox.classList.contains('active')) return;
 
             if (e.key === 'Escape') {
-                closeLightbox();
+                this.closeLightbox();
             } else if (e.key === 'ArrowLeft') {
-                prevImage();
+                this.prevImage();
             } else if (e.key === 'ArrowRight') {
-                nextImage();
+                this.nextImage();
             }
         });
     }
 }
 
 // Initialize lightbox with clicked image
-function initLightbox(clickedImg) {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('.lightbox-img');
-    const counter = lightbox.querySelector('.lightbox-counter');
-
+ProjectLightbox.initLightbox = function(clickedImg) {
     // Get the parent gallery container
     const galleryContainer = clickedImg.closest('.gallery-grid');
 
@@ -85,110 +106,96 @@ function initLightbox(clickedImg) {
     let currentIndex = galleryImages.indexOf(clickedImg);
 
     // Update counter
-    counter.textContent = `Image ${currentIndex + 1} of ${galleryImages.length}`;
+    this.elements.counter.textContent = `Image ${currentIndex + 1} of ${galleryImages.length}`;
 
     // Set image source
-    lightboxImg.src = clickedImg.src;
-    lightboxImg.alt = clickedImg.alt;
+    this.elements.lightboxImg.src = clickedImg.src;
+    this.elements.lightboxImg.alt = clickedImg.alt;
 
-    // Store current index and gallery images in lightbox
-    lightbox.dataset.currentIndex = currentIndex;
-    lightbox.dataset.totalImages = galleryImages.length;
-
-    // Store a reference to the gallery container
-    lightbox.dataset.galleryContainerId = galleryContainer.id || 'gallery-' + Math.random().toString(36).substr(2, 9);
-    if (!galleryContainer.id) {
-        galleryContainer.id = lightbox.dataset.galleryContainerId;
-    }
+    // Store current gallery context
+    this.currentGallery = {
+        images: galleryImages,
+        currentIndex: currentIndex,
+        container: galleryContainer
+    };
 
     // Show lightbox
-    lightbox.classList.add('active');
+    this.elements.lightbox.classList.add('active');
     document.body.style.overflow = 'hidden'; // Prevent scrolling
 
     // Preload adjacent images
-    preloadImages(galleryImages, currentIndex);
+    this.preloadImages();
 }
 
 // Close lightbox
-function closeLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    lightbox.classList.remove('active');
+ProjectLightbox.closeLightbox = function() {
+    this.elements.lightbox.classList.remove('active');
     document.body.style.overflow = 'auto'; // Enable scrolling
+
+    // Reset current gallery context
+    this.currentGallery = {
+        images: [],
+        currentIndex: 0,
+        container: null
+    };
 }
 
 // Navigate to previous image
-function prevImage() {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('.lightbox-img');
-    const counter = lightbox.querySelector('.lightbox-counter');
+ProjectLightbox.prevImage = function() {
+    // Get current gallery context
+    const { images, currentIndex } = this.currentGallery;
+    const totalImages = images.length;
 
-    // Get current index and total images
-    let currentIndex = parseInt(lightbox.dataset.currentIndex);
-    const totalImages = parseInt(lightbox.dataset.totalImages);
+    if (totalImages === 0) return;
 
     // Calculate previous index
-    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-
-    // Get the gallery container
-    const galleryContainerId = lightbox.dataset.galleryContainerId;
-    const galleryContainer = document.getElementById(galleryContainerId);
-
-    // Get all gallery images within the same container
-    const galleryImages = Array.from(galleryContainer.querySelectorAll('.gallery-img'));
+    const newIndex = (currentIndex - 1 + totalImages) % totalImages;
 
     // Update lightbox
-    lightboxImg.src = galleryImages[currentIndex].src;
-    lightboxImg.alt = galleryImages[currentIndex].alt;
+    this.elements.lightboxImg.src = images[newIndex].src;
+    this.elements.lightboxImg.alt = images[newIndex].alt;
 
     // Update counter
-    counter.textContent = `Image ${currentIndex + 1} of ${totalImages}`;
+    this.elements.counter.textContent = `Image ${newIndex + 1} of ${totalImages}`;
 
     // Update current index
-    lightbox.dataset.currentIndex = currentIndex;
+    this.currentGallery.currentIndex = newIndex;
 
     // Preload adjacent images
-    preloadImages(galleryImages, currentIndex);
+    this.preloadImages();
 }
 
 // Navigate to next image
-function nextImage() {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('.lightbox-img');
-    const counter = lightbox.querySelector('.lightbox-counter');
+ProjectLightbox.nextImage = function() {
+    // Get current gallery context
+    const { images, currentIndex } = this.currentGallery;
+    const totalImages = images.length;
 
-    // Get current index and total images
-    let currentIndex = parseInt(lightbox.dataset.currentIndex);
-    const totalImages = parseInt(lightbox.dataset.totalImages);
+    if (totalImages === 0) return;
 
     // Calculate next index
-    currentIndex = (currentIndex + 1) % totalImages;
-
-    // Get the gallery container
-    const galleryContainerId = lightbox.dataset.galleryContainerId;
-    const galleryContainer = document.getElementById(galleryContainerId);
-
-    // Get all gallery images within the same container
-    const galleryImages = Array.from(galleryContainer.querySelectorAll('.gallery-img'));
+    const newIndex = (currentIndex + 1) % totalImages;
 
     // Update lightbox
-    lightboxImg.src = galleryImages[currentIndex].src;
-    lightboxImg.alt = galleryImages[currentIndex].alt;
+    this.elements.lightboxImg.src = images[newIndex].src;
+    this.elements.lightboxImg.alt = images[newIndex].alt;
 
     // Update counter
-    counter.textContent = `Image ${currentIndex + 1} of ${totalImages}`;
+    this.elements.counter.textContent = `Image ${newIndex + 1} of ${totalImages}`;
 
     // Update current index
-    lightbox.dataset.currentIndex = currentIndex;
+    this.currentGallery.currentIndex = newIndex;
 
     // Preload adjacent images
-    preloadImages(galleryImages, currentIndex);
+    this.preloadImages();
 }
 
 // Preload adjacent images for smoother navigation
-function preloadImages(images, currentIndex) {
-    if (!images || images.length === 0) return;
-
+ProjectLightbox.preloadImages = function() {
+    const { images, currentIndex } = this.currentGallery;
     const totalImages = images.length;
+
+    if (totalImages <= 1) return;
 
     // Preload next image
     const nextIndex = (currentIndex + 1) % totalImages;
