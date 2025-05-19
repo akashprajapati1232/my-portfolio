@@ -7,7 +7,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Create lightbox elements
     createLightbox();
-    
+
     // Initialize lightbox after modal is shown
     document.addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('gallery-img')) {
@@ -23,7 +23,7 @@ function createLightbox() {
         const lightbox = document.createElement('div');
         lightbox.id = 'lightbox';
         lightbox.className = 'lightbox';
-        
+
         lightbox.innerHTML = `
             <div class="lightbox-content">
                 <img src="" alt="Enlarged Image" class="lightbox-img">
@@ -35,29 +35,29 @@ function createLightbox() {
                 <div class="lightbox-counter">Image 1 of 6</div>
             </div>
         `;
-        
+
         document.body.appendChild(lightbox);
-        
+
         // Add event listeners
         const closeBtn = lightbox.querySelector('.lightbox-close');
         const prevBtn = lightbox.querySelector('.lightbox-prev');
         const nextBtn = lightbox.querySelector('.lightbox-next');
-        
+
         closeBtn.addEventListener('click', closeLightbox);
         prevBtn.addEventListener('click', prevImage);
         nextBtn.addEventListener('click', nextImage);
-        
+
         // Close lightbox when clicking outside the image
         lightbox.addEventListener('click', function(e) {
             if (e.target === lightbox) {
                 closeLightbox();
             }
         });
-        
+
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (!lightbox.classList.contains('active')) return;
-            
+
             if (e.key === 'Escape') {
                 closeLightbox();
             } else if (e.key === 'ArrowLeft') {
@@ -74,28 +74,37 @@ function initLightbox(clickedImg) {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = lightbox.querySelector('.lightbox-img');
     const counter = lightbox.querySelector('.lightbox-counter');
-    
-    // Get all gallery images
-    const galleryImages = Array.from(document.querySelectorAll('.gallery-img'));
-    
+
+    // Get the parent gallery container
+    const galleryContainer = clickedImg.closest('.gallery-grid');
+
+    // Get all gallery images within the same container
+    const galleryImages = Array.from(galleryContainer.querySelectorAll('.gallery-img'));
+
     // Set current image index
     let currentIndex = galleryImages.indexOf(clickedImg);
-    
+
     // Update counter
     counter.textContent = `Image ${currentIndex + 1} of ${galleryImages.length}`;
-    
+
     // Set image source
     lightboxImg.src = clickedImg.src;
     lightboxImg.alt = clickedImg.alt;
-    
+
     // Store current index and gallery images in lightbox
     lightbox.dataset.currentIndex = currentIndex;
     lightbox.dataset.totalImages = galleryImages.length;
-    
+
+    // Store a reference to the gallery container
+    lightbox.dataset.galleryContainerId = galleryContainer.id || 'gallery-' + Math.random().toString(36).substr(2, 9);
+    if (!galleryContainer.id) {
+        galleryContainer.id = lightbox.dataset.galleryContainerId;
+    }
+
     // Show lightbox
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden'; // Prevent scrolling
-    
+
     // Preload adjacent images
     preloadImages(galleryImages, currentIndex);
 }
@@ -112,27 +121,33 @@ function prevImage() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = lightbox.querySelector('.lightbox-img');
     const counter = lightbox.querySelector('.lightbox-counter');
-    
+
     // Get current index and total images
     let currentIndex = parseInt(lightbox.dataset.currentIndex);
     const totalImages = parseInt(lightbox.dataset.totalImages);
-    
+
     // Calculate previous index
     currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-    
+
+    // Get the gallery container
+    const galleryContainerId = lightbox.dataset.galleryContainerId;
+    const galleryContainer = document.getElementById(galleryContainerId);
+
+    // Get all gallery images within the same container
+    const galleryImages = Array.from(galleryContainer.querySelectorAll('.gallery-img'));
+
     // Update lightbox
-    const galleryImages = document.querySelectorAll('.gallery-img');
     lightboxImg.src = galleryImages[currentIndex].src;
     lightboxImg.alt = galleryImages[currentIndex].alt;
-    
+
     // Update counter
     counter.textContent = `Image ${currentIndex + 1} of ${totalImages}`;
-    
+
     // Update current index
     lightbox.dataset.currentIndex = currentIndex;
-    
+
     // Preload adjacent images
-    preloadImages(Array.from(galleryImages), currentIndex);
+    preloadImages(galleryImages, currentIndex);
 }
 
 // Navigate to next image
@@ -140,40 +155,52 @@ function nextImage() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = lightbox.querySelector('.lightbox-img');
     const counter = lightbox.querySelector('.lightbox-counter');
-    
+
     // Get current index and total images
     let currentIndex = parseInt(lightbox.dataset.currentIndex);
     const totalImages = parseInt(lightbox.dataset.totalImages);
-    
+
     // Calculate next index
     currentIndex = (currentIndex + 1) % totalImages;
-    
+
+    // Get the gallery container
+    const galleryContainerId = lightbox.dataset.galleryContainerId;
+    const galleryContainer = document.getElementById(galleryContainerId);
+
+    // Get all gallery images within the same container
+    const galleryImages = Array.from(galleryContainer.querySelectorAll('.gallery-img'));
+
     // Update lightbox
-    const galleryImages = document.querySelectorAll('.gallery-img');
     lightboxImg.src = galleryImages[currentIndex].src;
     lightboxImg.alt = galleryImages[currentIndex].alt;
-    
+
     // Update counter
     counter.textContent = `Image ${currentIndex + 1} of ${totalImages}`;
-    
+
     // Update current index
     lightbox.dataset.currentIndex = currentIndex;
-    
+
     // Preload adjacent images
-    preloadImages(Array.from(galleryImages), currentIndex);
+    preloadImages(galleryImages, currentIndex);
 }
 
 // Preload adjacent images for smoother navigation
 function preloadImages(images, currentIndex) {
+    if (!images || images.length === 0) return;
+
     const totalImages = images.length;
-    
+
     // Preload next image
     const nextIndex = (currentIndex + 1) % totalImages;
-    const nextImage = new Image();
-    nextImage.src = images[nextIndex].src;
-    
+    if (images[nextIndex]) {
+        const nextImageObj = new Image();
+        nextImageObj.src = images[nextIndex].src;
+    }
+
     // Preload previous image
     const prevIndex = (currentIndex - 1 + totalImages) % totalImages;
-    const prevImage = new Image();
-    prevImage.src = images[prevIndex].src;
+    if (images[prevIndex]) {
+        const prevImageObj = new Image();
+        prevImageObj.src = images[prevIndex].src;
+    }
 }
