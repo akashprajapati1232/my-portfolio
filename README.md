@@ -231,7 +231,6 @@ Akash Prajapati - [akashprajapati1232@gmail.com](mailto:akashprajapati1232@gmail
 
 - GitHub: [https://github.com/akashprajapati1232](https://github.com/akashprajapati1232)
 - LinkedIn: [https://www.linkedin.com/in/akash-prajapati1232/](https://www.linkedin.com/in/akash-prajapati1232/)
-- Instagram: [https://www.instagram.com/itz_prabhas43/](https://www.instagram.com/itz_prabhas43/)
 
 Project Link: [https://github.com/akashprajapati1232/my-portfolio](https://github.com/akashprajapati1232/my-portfolio)
 
